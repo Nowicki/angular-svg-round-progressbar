@@ -28,12 +28,15 @@ angular.module('angular-svg-round-progress')
                     bgcolor:        "@",
                     stroke:         "@",
                     iterations:     "@",
-                    animation:      "@"
+                    animation:      "@",
+                    description:    "@"
                 },
                 link: function (scope, element) {
-                    var ring        = element.find('path'),
-                        background  = element.find('circle'),
-                        options     = angular.copy(roundProgressConfig),
+                    var ring            = element.find('path'),
+                        background      = element.find('circle'),
+                        primaryText     = element.find('text').eq(0),
+                        secondaryText   = element.find('text').eq(1),
+                        options         = angular.copy(roundProgressConfig),
                         resetValue;
 
                     var renderCircle = function(){
@@ -47,6 +50,26 @@ angular.module('angular-svg-round-progress')
                             "width":        diameter + "px",
                             "height":       (isSemicircle ? radius : diameter) + "px",
                             "overflow":     "hidden" // on some browsers the background overflows, if in semicircle mode
+                        });
+
+                        primaryText.css({
+                            'font-size': '30px',
+                            'fill': '#886aea',
+                            'text-anchor': 'middle',
+                            'alignment-baseline': 'middle'
+                        }).attr({
+                            dx: '50%',
+                            dy: '50%'
+                        });
+
+                        secondaryText.css({
+                            'text-anchor': 'middle',
+                            'font-size': '20px',
+                            'alignment-baseline': 'middle',
+                            'transform': 'translate(0px, 30px)'
+                        }).attr({
+                            dx: '50%',
+                            dy: '50%'
                         });
 
                         ring.css({
@@ -137,6 +160,8 @@ angular.module('angular-svg-round-progress')
                 template:[
                     '<svg class="round-progress" xmlns="http://www.w3.org/2000/svg">',
                         '<circle fill="none"/>',
+                        '<text dx="50%" dy="50%">{{ current }} %</text>',
+                        '<text dx="50%" dy="50%">{{ description }}</text>',
                         '<path fill="none"/>',
                         '<g ng-transclude></g>',
                     '</svg>'
